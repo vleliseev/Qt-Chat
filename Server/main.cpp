@@ -1,18 +1,17 @@
-#include "mainform.h"
-#include <QApplication>
+#include <iostream>
+#include <QCoreApplication>
+#include "connectionhandler.h"
 
-#include "Data/authdata.h"
 
-void foo(QDataStream &st, BaseData &d)
+int main(int argc, char **argv)
 {
-    st >> d;
-}
+    QCoreApplication app(argc, argv);
+    ConnectionHandler netmanager; // main network class
+    std::cout << "This is Qt-Chat server console.\n"
+                 "Server is started at localhost.\n";
+    netmanager.startServer();
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    MainForm w;
-    w.show();
-
-    return a.exec();
+    return app.exec();
+    //MainForm w;
+    //w.show();
 }

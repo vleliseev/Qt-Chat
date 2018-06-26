@@ -9,7 +9,7 @@ QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Chat
+TARGET = Client
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -29,19 +29,19 @@ SOURCES += \
         authmenu.cpp \
     netservice.cpp \
     chatwidget.cpp \
-    Data/authanswer.cpp \
-    Data/authdata.cpp \
-    Data/basedata.cpp \
-    datahandler.cpp
+    datahandler.cpp \
+    ../Data/authanswer.cpp \
+    ../Data/authdata.cpp \
+    ../Data/basedata.cpp
 
 HEADERS += \
         authmenu.h \
     netservice.h \
     chatwidget.h \
-    Data/authanswer.h \
-    Data/authdata.h \
-    Data/basedata.h \
-    datahandler.h
+    datahandler.h \
+    ../Data/authanswer.h \
+    ../Data/authdata.h \
+    ../Data/basedata.h
 
 FORMS += \
         authmenu.ui \

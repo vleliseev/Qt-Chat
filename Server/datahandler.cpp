@@ -28,7 +28,6 @@ void DataHandler::on_Socket_Ready_Read()
     /* waiting till we get full data */
     if (socket->bytesAvailable() < sizeRead) return;
     readStream >> type;
-    qDebug() << sizeRead << type;
     /* TODO: SQL database with usernames and passwords. */
     /* No password checking yet. */
     if (type == DataType::AuthRequest)

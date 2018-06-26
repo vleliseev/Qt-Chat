@@ -5,8 +5,8 @@
 
 #include <QTcpSocket>
 
-#include "Data/authdata.h"
-#include "Data/authanswer.h"
+#include "../Data/authdata.h"
+#include "../Data/authanswer.h"
 
 
 class DataHandler : public QObject

@@ -61,7 +61,7 @@
        <string notr="true">color: silver;</string>
       </property>
       <property name="text">
-       <string>Time to Talk</string>
+       <string>Qt Chat</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

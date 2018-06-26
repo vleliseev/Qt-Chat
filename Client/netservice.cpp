@@ -44,14 +44,12 @@ void NetService::onSignIn(const QString &username, const QString &password)
 void NetService::onSocketConnected()
 {
     ctimer->stop();
-    qDebug() << "connected";
     DataHandler::write(socket, identifier);
 }
 
 void NetService::onSocketDisconnected()
 {
     socket->abort();
-    //menu->setStatus("Connection lost.");
 }
 
 void NetService::onConnectionTimeOut()
@@ -67,7 +65,10 @@ void NetService::onAuthAnswer(AuthAnswer &ans)
     {
         menu->setStatus("Authentication error.");
         socket->abort();
+        return;
     }
+
+
     menu->close();
     chat->show();
 }

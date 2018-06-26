@@ -21,11 +21,6 @@ public:
 
     ~ConnectionHandler();
 
-signals:
-
-    void userConnected(QString);
-    void userDisconnected(QString);
-
 private slots:
 
     void on_New_Connection();

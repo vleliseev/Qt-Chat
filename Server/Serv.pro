@@ -4,10 +4,12 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       -= gui
 QT       += network
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+CONFIG += c++11 console
+CONFIG -= app_bundle
 
 TARGET = Serv
 TEMPLATE = app
@@ -26,20 +28,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainform.cpp \
     connectionhandler.cpp \
     datahandler.cpp \
-    Data/basedata.cpp \
-    Data/authdata.cpp \
-    Data/authanswer.cpp
+    ../Data/authanswer.cpp \
+    ../Data/authdata.cpp \
+    ../Data/basedata.cpp
 
 HEADERS += \
-        mainform.h \
     connectionhandler.h \
     datahandler.h \
-    Data/basedata.h \
-    Data/authdata.h \
-    Data/authanswer.h
+    ../Data/authanswer.h \
+    ../Data/authdata.h \
+    ../Data/basedata.h
 
-FORMS += \
-        mainform.ui

@@ -38,9 +38,10 @@ void DataHandler::on_Socket_Ready_Read()
     {
         AuthAnswer read;
         readStream >> read;
-        qDebug() << read.isSigned();
         emit authAnswer(read);
     }
+
+
 
 }
 

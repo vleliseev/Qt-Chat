@@ -1,6 +1,6 @@
 #include "basedata.h"
 
-BaseData::BaseData(QObject *parent) : QObject(parent)
+BaseData::BaseData()
 { }
 
 

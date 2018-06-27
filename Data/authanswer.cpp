@@ -1,12 +1,7 @@
 #include "authanswer.h"
 
-AuthAnswer::AuthAnswer(bool answer, QObject *parent) :
-    BaseData(parent),
+AuthAnswer::AuthAnswer(bool answer) :
     answer(answer)
-{ }
-
-AuthAnswer::AuthAnswer(QObject *parent) :
-    BaseData(parent)
 { }
 
 QDataStream& AuthAnswer::toStream(QDataStream &stream)

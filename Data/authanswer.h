@@ -5,10 +5,9 @@
 
 class AuthAnswer : public BaseData
 {
-    Q_OBJECT
 public:
-    AuthAnswer(bool answer, QObject *parent = nullptr);
-    AuthAnswer(QObject *parent = nullptr);
+    AuthAnswer(bool answer);
+    AuthAnswer() = default;
 
     virtual QDataStream& toStream(QDataStream &stream) override;
     virtual QDataStream& fromStream(QDataStream &stream) override;

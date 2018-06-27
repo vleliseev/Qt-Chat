@@ -8,8 +8,8 @@ class AuthData : public BaseData
 {
 public:
 
-    AuthData(QObject *parent = nullptr);
-    AuthData(const QString &login, const QString &password, QObject *parent = nullptr);
+    AuthData() = default;
+    AuthData(const QString &login, const QString &password);
 
     virtual QDataStream& toStream(QDataStream &stream) override;
     virtual QDataStream& fromStream(QDataStream &stream) override;

@@ -32,7 +32,8 @@ SOURCES += \
     datahandler.cpp \
     ../Data/authanswer.cpp \
     ../Data/authdata.cpp \
-    ../Data/basedata.cpp
+    ../Data/basedata.cpp \
+    ../Data/userlist.cpp
 
 HEADERS += \
         authmenu.h \
@@ -41,7 +42,8 @@ HEADERS += \
     datahandler.h \
     ../Data/authanswer.h \
     ../Data/authdata.h \
-    ../Data/basedata.h
+    ../Data/basedata.h \
+    ../Data/userlist.h
 
 FORMS += \
         authmenu.ui \

@@ -1,26 +1,22 @@
 #ifndef BASEDATA_H
 #define BASEDATA_H
 
-#include <QObject>
 #include <QDataStream>
-
 
 enum DataType : qint8
 {
     Ping,
     AuthRequest,
     AuthResponse,
-    Message,
-    UserList,
+    UserListResponse,
     Connection,
     Disconnection
 };
 
-class BaseData : public QObject
+class BaseData
 {
-    Q_OBJECT
 public:
-    explicit BaseData(QObject *parent = nullptr);
+    explicit BaseData();
 
     friend QDataStream &operator >> (QDataStream &stream, BaseData &data);
     friend QDataStream &operator << (QDataStream &stream, BaseData &data);
@@ -33,9 +29,5 @@ public:
 
 QDataStream &operator >> (QDataStream &stream, BaseData &data);
 QDataStream &operator << (QDataStream &stream, BaseData &data);
-
-
-
-
 
 #endif // BASEDATA_H

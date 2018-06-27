@@ -1,11 +1,6 @@
 #include "authdata.h"
 
-AuthData::AuthData(QObject *parent) :
-    BaseData(parent)
-{ }
-
-AuthData::AuthData(const QString &login, const QString &password, QObject *parent) :
-    BaseData(parent),
+AuthData::AuthData(const QString &login, const QString &password) :
     login(login),
     password(password)
 { }

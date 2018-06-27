@@ -27,12 +27,17 @@ void ConnectionHandler::stopServer()
 void ConnectionHandler::on_New_Connection()
 {
     auto client = serv->nextPendingConnection();
-    qDebug() << "New connection try from" << client->peerAddress().toString() << "...";
-    connect(client, SIGNAL(readyRead()),
+    connectSocketSignals(client);
+    qDebug() << "New connection try from" << getIPv4AddrString(client) << "...";
+}
+
+void ConnectionHandler::connectSocketSignals(QTcpSocket *socket)
+{
+    connect(socket, SIGNAL(readyRead()),
             dataManager, SLOT(on_Socket_Ready_Read()));
-    connect(client, SIGNAL(disconnected()),
+    connect(socket, SIGNAL(disconnected()),
             this, SLOT(on_Client_Disconnection()));
-    connect(client, SIGNAL(error(QAbstractSocket::SocketError)),
+    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
             this, SLOT(on_Socket_Error(QAbstractSocket::SocketError)));
 }
 
@@ -54,7 +59,8 @@ ConnectionHandler::~ConnectionHandler()
 /* todo... */
 void ConnectionHandler::on_Socket_Error(QAbstractSocket::SocketError)
 {
-
+    auto socket = static_cast<QTcpSocket *>(sender());
+    qDebug() << getIPv4AddrString(socket) << socket->errorString();
 }
 
 void ConnectionHandler::on_Auth_Request(QTcpSocket *socket, AuthData &d)
@@ -63,10 +69,24 @@ void ConnectionHandler::on_Auth_Request(QTcpSocket *socket, AuthData &d)
     {
         AuthAnswer ans(true);
         DataHandler::write(socket, ans);
-        qDebug() << socket->peerAddress().toString() << "authentication success. Accepted.";
+        //clients.insert(d.getLogin(), socket);
+        qDebug() << getIPv4AddrString(socket) << "authentication successful. Accepted.";
     }
     else
-        qDebug() << socket->peerAddress().toString() << "authentication usuccessful. Aborted.";
+    {
+        AuthAnswer ans(false);
+        DataHandler::write(socket, ans);
+        qDebug() << getIPv4AddrString(socket) << "authentication usuccessful. Aborted.";
+        socket->abort();
+    }
+}
+
+
+QString ConnectionHandler::getIPv4AddrString(QTcpSocket *socket)
+{
+    QString IPv4IPv6 = socket->peerAddress().toString();
+    QString IPv4 = IPv4IPv6.right(IPv4IPv6.size() - 7);
+    return IPv4;
 }
 
 

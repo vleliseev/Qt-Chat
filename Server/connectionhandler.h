@@ -30,9 +30,13 @@ private slots:
     /* this slot works when dataManager reads */
     /* authentication request data from socket */
     void on_Auth_Request(QTcpSocket* socket, AuthData &d);
+
 private:
 
-    QMap<AuthData, QTcpSocket*> clients;
+    QString getIPv4AddrString(QTcpSocket *socket);
+    void connectSocketSignals(QTcpSocket *socket);
+
+    QMap<QString, QTcpSocket*> clients;
     QTcpServer *serv;
     DataHandler *dataManager;
 };

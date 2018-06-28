@@ -16,6 +16,7 @@ public:
 
     /* returns true on successful authentication */
     bool isSigned() const;
+    void setSigned(bool answer);
 
 private:
     bool answer;

@@ -23,17 +23,20 @@ private slots:
     void onSocketConnected();
     void onSocketDisconnected();
     void onConnectionTimeOut();
+    void onUserListRead(UserList &lst);
 
     /* handling authentication answer from server */
-    void onAuthAnswer(AuthAnswer &ans);
+    void onAuthAnswerRead(AuthAnswer &ans);
 
 private:
+
     AuthMenu *menu;
     ChatWidget *chat;
     QTcpSocket *socket;
     QTimer *ctimer; // connection timer
     DataHandler *dataManager;
     AuthData identifier;
+
 };
 
 #endif // NETSERVICE_H

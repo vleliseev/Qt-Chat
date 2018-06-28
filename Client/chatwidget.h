@@ -2,6 +2,7 @@
 #define CHATWIDGET_H
 
 #include <QMainWindow>
+#include "../Data/userlist.h"
 
 namespace Ui {
 class ChatWidget;
@@ -13,9 +14,12 @@ class ChatWidget : public QMainWindow
 
 public:
     explicit ChatWidget(QWidget *parent = 0);
+
     void addParticipant(const QString &username);
-    void setUserList(const QStringList &users);
+    void setUserList(const QStringList &lst);
+    void setUserList(const UserList &lst);
     void addMessage(const QString &msg);
+
     ~ChatWidget();
 
 private:

@@ -7,6 +7,7 @@
 
 #include "../Data/authdata.h"
 #include "../Data/authanswer.h"
+#include "../Data/userlist.h"
 
 
 class DataHandler : public QObject
@@ -20,8 +21,10 @@ public:
     static void write(QTcpSocket *socket, BaseData &data);
 
 signals:
-    void authRequest(QTcpSocket*, AuthData&);
-    void authAnswer(AuthAnswer&);
+
+    void authRequestRead(QTcpSocket*, AuthData&);
+    void authAnswerRead(AuthAnswer&);
+    void userListRead(UserList &lst);
 
 private slots:
 

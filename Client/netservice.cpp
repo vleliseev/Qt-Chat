@@ -12,18 +12,27 @@ NetService::NetService(QObject *parent) :
     menu->show();
     chat->setVisible(false);
 
+
     connect(menu, SIGNAL(signIn(QString, QString)),
             this, SLOT(onSignIn(QString, QString)));
+
     connect(socket, SIGNAL(connected()),
             this, SLOT(onSocketConnected()));
+
     connect(socket, SIGNAL(disconnected()),
             this, SLOT(onSocketDisconnected()));
+
     connect(socket, SIGNAL(readyRead()),
             dataManager, SLOT(on_Socket_Ready_Read()));
+
     connect(ctimer, SIGNAL(timeout()),
             this, SLOT(onConnectionTimeOut()));
-    connect(dataManager, SIGNAL(authAnswer(AuthAnswer&)),
-            this, SLOT(onAuthAnswer(AuthAnswer&)));
+
+    connect(dataManager, SIGNAL(authAnswerRead(AuthAnswer&)),
+            this, SLOT(onAuthAnswerRead(AuthAnswer&)));
+
+    connect(dataManager, SIGNAL(userListRead(UserList&)),
+            this, SLOT(onUserListRead(UserList&)));
 
 
 }
@@ -59,7 +68,7 @@ void NetService::onConnectionTimeOut()
 }
 
 
-void NetService::onAuthAnswer(AuthAnswer &ans)
+void NetService::onAuthAnswerRead(AuthAnswer &ans)
 {
     if (!ans.isSigned())
     {
@@ -68,7 +77,11 @@ void NetService::onAuthAnswer(AuthAnswer &ans)
         return;
     }
 
-
     menu->close();
     chat->show();
+}
+
+void NetService::onUserListRead(UserList &lst)
+{
+    chat->setUserList(lst);
 }

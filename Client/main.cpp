@@ -5,8 +5,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    //time to talk starting !!!
-    auto t2t = new NetService();
+    auto core = new NetService;
 
     return a.exec();
 }

@@ -30,3 +30,8 @@ bool AuthAnswer::isSigned() const
 {
     return answer;
 }
+
+void AuthAnswer::setSigned(bool answer)
+{
+    this->answer = answer;
+}

@@ -8,7 +8,7 @@ class UserList : public BaseData
 public:
 
     UserList() = default;
-    UserList(QList<QString> &users);
+    UserList(const QList<QString> &users);
 
 
     virtual QDataStream& toStream(QDataStream &stream) override;

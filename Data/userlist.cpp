@@ -1,6 +1,6 @@
 #include "userlist.h"
 
-UserList::UserList(QList<QString> &users) :
+UserList::UserList(const QList<QString> &users) :
     users(users)
 { }
 

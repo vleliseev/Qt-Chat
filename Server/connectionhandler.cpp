@@ -7,7 +7,7 @@ ConnectionHandler::ConnectionHandler(QObject *parent) :
 {
     connect(serv, SIGNAL(newConnection()),
             this, SLOT(on_New_Connection()));
-    connect(dataManager, SIGNAL(authRequest(QTcpSocket*,AuthData&)),
+    connect(dataManager, SIGNAL(authRequestRead(QTcpSocket*,AuthData&)),
            this, SLOT(on_Auth_Request(QTcpSocket*,AuthData&)));
 
 }
@@ -43,7 +43,9 @@ void ConnectionHandler::connectSocketSignals(QTcpSocket *socket)
 
 void ConnectionHandler::on_Client_Disconnection()
 {
-
+    auto disconnectedSocket = static_cast<QTcpSocket *>(sender());
+    auto username = clients.key(disconnectedSocket);
+    clients.remove(username);
 }
 
 bool ConnectionHandler::isListening() const
@@ -65,19 +67,26 @@ void ConnectionHandler::on_Socket_Error(QAbstractSocket::SocketError)
 
 void ConnectionHandler::on_Auth_Request(QTcpSocket *socket, AuthData &d)
 {
+    AuthAnswer ans;
     if (d.getPassword() == "")
     {
-        AuthAnswer ans(true);
+        /* writing answer to connected client */
+        ans.setSigned(true);
+        clients.insert(d.getLogin(), socket);
         DataHandler::write(socket, ans);
-        //clients.insert(d.getLogin(), socket);
+
+        /* writing list of authenticated online users */
+        UserList participants(clients.keys());
+        DataHandler::write(socket, participants);
+
         qDebug() << getIPv4AddrString(socket) << "authentication successful. Accepted.";
     }
+
     else
     {
-        AuthAnswer ans(false);
-        DataHandler::write(socket, ans);
+        ans.setSigned(false);
         qDebug() << getIPv4AddrString(socket) << "authentication usuccessful. Aborted.";
-        socket->abort();
+        DataHandler::write(socket, ans);
     }
 }
 

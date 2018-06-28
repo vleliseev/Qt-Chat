@@ -34,14 +34,14 @@ void DataHandler::on_Socket_Ready_Read()
     {
         AuthData read;
         readStream >> read;
-        emit authRequest(socket, read);
+        emit authRequestRead(socket, read);
     }
 
     if (type == DataType::AuthResponse)
     {
         AuthAnswer read;
         readStream >> read;
-        emit authAnswer(read);
+        emit authAnswerRead(read);
     }
 
 }

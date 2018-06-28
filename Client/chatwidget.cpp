@@ -26,7 +26,13 @@ void ChatWidget::addMessage(const QString &msg)
     ui->Dialog_2->addItem(item);
 }
 
-void ChatWidget::setUserList(const QStringList &users)
+void ChatWidget::setUserList(const QStringList &lst)
 {
-    ui->Users->addItems(users);
+    ui->Users->addItems(lst);
+}
+
+void ChatWidget::setUserList(const UserList &lst)
+{
+    auto users = lst.getUsers();
+    for (auto &user : users) this->addParticipant(user);
 }

@@ -23,6 +23,8 @@ private slots:
     void onSocketConnected();
     void onSocketDisconnected();
     void onConnectionTimeOut();
+
+    /* handling received userlist */
     void onUserListRead(UserList &lst);
 
     /* handling authentication answer from server */

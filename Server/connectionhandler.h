@@ -7,7 +7,9 @@
 #include <QMap>
 #include <QString>
 
-#include "datahandler.h"
+#include "../Data/authanswer.h"
+#include "../Data/authdata.h"
+#include "../Data/userlist.h"
 
 class ConnectionHandler : public QObject
 {
@@ -18,6 +20,7 @@ public:
     void startServer();
     void stopServer();
     bool isListening() const;
+    void write(QTcpSocket *socket, BaseData &from);
 
     ~ConnectionHandler();
 
@@ -26,19 +29,20 @@ private slots:
     void on_New_Connection();
     void on_Client_Disconnection();
     void on_Socket_Error(QAbstractSocket::SocketError);
-
-    /* this slot works when dataManager reads */
-    /* authentication request data from socket */
-    void on_Auth_Request(QTcpSocket* socket, AuthData &d);
+    void on_Socket_Ready_Read();
 
 private:
+    void readAuthRequest(QTcpSocket *socket);
+    void writeAuthAnswer(QTcpSocket *socket, bool answer);
+    void writeUserList(QTcpSocket *socket,const QList<QString> &lst);
 
     QString getIPv4AddrString(QTcpSocket *socket);
     void connectSocketSignals(QTcpSocket *socket);
 
+private:
+
     QMap<QString, QTcpSocket*> clients;
     QTcpServer *serv;
-    DataHandler *dataManager;
 };
 
 #endif // CONNECTIONHANDLER_H

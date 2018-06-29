@@ -9,7 +9,7 @@ enum DataType : qint8
     AuthRequest,
     AuthResponse,
     UserListResponse,
-    Connection,
+    NewConnection,
     Disconnection
 };
 

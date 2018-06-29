@@ -16,8 +16,7 @@ public:
     explicit ChatWidget(QWidget *parent = 0);
 
     void addParticipant(const QString &username);
-    void setUserList(const QStringList &lst);
-    void setUserList(const UserList &lst);
+    void addParticipants(const UserList &lst);
     void addMessage(const QString &msg);
 
     ~ChatWidget();

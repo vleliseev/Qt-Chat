@@ -48,7 +48,5 @@ void DataHandler::on_Socket_Ready_Read()
         emit userListRead(participants);
     }
 
-
-
 }
 

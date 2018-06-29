@@ -1,15 +1,12 @@
 #include "connectionhandler.h"
 
+
 ConnectionHandler::ConnectionHandler(QObject *parent) :
     QObject(parent),
-    serv(new QTcpServer(this)),
-    dataManager(new DataHandler(this))
+    serv(new QTcpServer(this))
 {
     connect(serv, SIGNAL(newConnection()),
             this, SLOT(on_New_Connection()));
-    connect(dataManager, SIGNAL(authRequestRead(QTcpSocket*,AuthData&)),
-           this, SLOT(on_Auth_Request(QTcpSocket*,AuthData&)));
-
 }
 
 void ConnectionHandler::startServer()
@@ -23,7 +20,6 @@ void ConnectionHandler::stopServer()
     clients.clear();
 }
 
-
 void ConnectionHandler::on_New_Connection()
 {
     auto client = serv->nextPendingConnection();
@@ -34,9 +30,11 @@ void ConnectionHandler::on_New_Connection()
 void ConnectionHandler::connectSocketSignals(QTcpSocket *socket)
 {
     connect(socket, SIGNAL(readyRead()),
-            dataManager, SLOT(on_Socket_Ready_Read()));
+            this, SLOT(on_Socket_Ready_Read()));
+
     connect(socket, SIGNAL(disconnected()),
             this, SLOT(on_Client_Disconnection()));
+
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
             this, SLOT(on_Socket_Error(QAbstractSocket::SocketError)));
 }
@@ -58,44 +56,83 @@ ConnectionHandler::~ConnectionHandler()
     delete serv;
 }
 
-/* todo... */
 void ConnectionHandler::on_Socket_Error(QAbstractSocket::SocketError)
 {
     auto socket = static_cast<QTcpSocket *>(sender());
     qDebug() << getIPv4AddrString(socket) << socket->errorString();
 }
 
-void ConnectionHandler::on_Auth_Request(QTcpSocket *socket, AuthData &d)
-{
-    AuthAnswer ans;
-    if (d.getPassword() == "")
-    {
-        /* writing answer to connected client */
-        ans.setSigned(true);
-        clients.insert(d.getLogin(), socket);
-        DataHandler::write(socket, ans);
-
-        /* writing list of authenticated online users */
-        UserList participants(clients.keys());
-        DataHandler::write(socket, participants);
-
-        qDebug() << getIPv4AddrString(socket) << "authentication successful. Accepted.";
-    }
-
-    else
-    {
-        ans.setSigned(false);
-        qDebug() << getIPv4AddrString(socket) << "authentication usuccessful. Aborted.";
-        DataHandler::write(socket, ans);
-    }
-}
-
-
 QString ConnectionHandler::getIPv4AddrString(QTcpSocket *socket)
 {
     QString IPv4IPv6 = socket->peerAddress().toString();
     QString IPv4 = IPv4IPv6.right(IPv4IPv6.size() - 7);
     return IPv4;
+}
+
+
+void ConnectionHandler::write(QTcpSocket *socket, BaseData &from)
+{
+    QByteArray datagram;
+    QDataStream writeStream(&datagram, QIODevice::WriteOnly);
+    qint16 size = sizeof(qint8) + from.size(); // sizeof(qint8) is size of DataType
+    writeStream << size << (qint8)from.type();
+    writeStream << from;
+    socket->write(datagram);
+    socket->waitForBytesWritten();
+}
+
+void ConnectionHandler::on_Socket_Ready_Read()
+{
+    auto socket = static_cast<QTcpSocket *>(sender());
+    QDataStream readStream(socket);
+    qint16 sizeRead;
+    qint8 type;
+
+    readStream >> sizeRead;
+
+    /* waiting till we get full data */
+    if (socket->bytesAvailable() < sizeRead) return;
+    readStream >> type;
+
+    if (type == DataType::AuthRequest)
+        readAuthRequest(socket);
+}
+
+
+void ConnectionHandler::readAuthRequest(QTcpSocket *socket)
+{
+    QDataStream readStream(socket);
+    AuthData read;
+    readStream >> read;
+
+    /* checking password */
+    /* todo database */
+    if (read.getPassword() == "")
+    {
+        clients.insert(read.getLogin(), socket);
+        writeAuthAnswer(socket, true);
+        writeUserList(socket, clients.keys());
+        qDebug() << getIPv4AddrString(socket) << "authentication successful. Accepted.";
+    }
+    else
+    {
+        writeAuthAnswer(socket, false);
+        qDebug() << getIPv4AddrString(socket) << "authentication usuccessful. Aborted.";
+    }
+
+}
+
+
+void ConnectionHandler::writeAuthAnswer(QTcpSocket *socket, bool answer)
+{
+    AuthAnswer ans(answer);
+    write(socket, ans);
+}
+
+void ConnectionHandler::writeUserList(QTcpSocket *socket, const QList<QString> &lst)
+{
+    UserList participants(lst);
+    write(socket, participants);
 }
 
 

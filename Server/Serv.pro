@@ -29,7 +29,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     connectionhandler.cpp \
-    datahandler.cpp \
     ../Data/authanswer.cpp \
     ../Data/authdata.cpp \
     ../Data/basedata.cpp \
@@ -37,7 +36,6 @@ SOURCES += \
 
 HEADERS += \
     connectionhandler.h \
-    datahandler.h \
     ../Data/authanswer.h \
     ../Data/authdata.h \
     ../Data/basedata.h \

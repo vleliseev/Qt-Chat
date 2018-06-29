@@ -17,13 +17,12 @@ public:
 
     explicit DataHandler(QObject *parent = nullptr);
     static void write(QTcpSocket *socket, BaseData &data);
-    static BaseData* read(QTcpSocket *socket);
-
 signals:
 
     void authRequestRead(QTcpSocket*, AuthData&);
     void authAnswerRead(AuthAnswer&);
     void userListRead(UserList &lst);
+    void newConnection(QString &username);
 
 private slots:
     void on_Socket_Ready_Read();

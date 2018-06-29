@@ -16,14 +16,16 @@ class AuthMenu : public QMainWindow
 public:
     explicit AuthMenu(QWidget *parent = 0);
     ~AuthMenu();
+
     void setStatus(const QString &status);
 
 signals:
+
     void signIn(const QString &username, const QString &password);
 
 private slots:
-    void on_SignButton_clicked();
 
+    void on_SignButton_clicked();
     void on_Login_returnPressed();
 
 private:

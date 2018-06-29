@@ -39,7 +39,8 @@ NetService::NetService(QObject *parent) :
 
 NetService::~NetService()
 {
-
+    delete menu;
+    delete chat;
 }
 
 void NetService::onSignIn(const QString &username, const QString &password)
@@ -83,5 +84,5 @@ void NetService::onAuthAnswerRead(AuthAnswer &ans)
 
 void NetService::onUserListRead(UserList &lst)
 {
-    chat->setUserList(lst);
+    chat->addParticipants(lst);
 }

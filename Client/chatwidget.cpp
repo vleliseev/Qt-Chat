@@ -31,3 +31,9 @@ void ChatWidget::addParticipants(const UserList &lst)
     auto users = lst.getUsers();
     for (auto &user : users) this->addParticipant(user);
 }
+
+void ChatWidget::removeParticipant(const QString &username)
+{
+    auto removeItem = ui->Users->findItems(username, Qt::MatchFixedString).at(0);
+    delete removeItem;
+}

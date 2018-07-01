@@ -32,12 +32,14 @@ SOURCES += \
     ../Data/authanswer.cpp \
     ../Data/authdata.cpp \
     ../Data/basedata.cpp \
-    ../Data/userlist.cpp
+    ../Data/userlist.cpp \
+    ../Data/userdata.cpp
 
 HEADERS += \
     connectionhandler.h \
     ../Data/authanswer.h \
     ../Data/authdata.h \
     ../Data/basedata.h \
-    ../Data/userlist.h
+    ../Data/userlist.h \
+    ../Data/userdata.h
 

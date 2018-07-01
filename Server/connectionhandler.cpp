@@ -44,6 +44,7 @@ void ConnectionHandler::on_Client_Disconnection()
     auto disconnectedSocket = static_cast<QTcpSocket *>(sender());
     auto username = clients.key(disconnectedSocket);
     clients.remove(username);
+    writeAboutUserDisconnection(username);
 }
 
 bool ConnectionHandler::isListening() const
@@ -81,6 +82,17 @@ void ConnectionHandler::write(QTcpSocket *socket, BaseData &from)
     socket->waitForBytesWritten();
 }
 
+void ConnectionHandler::write(QTcpSocket *socket, UserData &data, DataType type)
+{
+    QByteArray datagram;
+    QDataStream writeStream(&datagram, QIODevice::WriteOnly);
+    qint16 size = sizeof(qint8) + data.size();
+    writeStream << size << (qint8)type;
+    writeStream << data;
+    socket->write(datagram);
+    socket->waitForBytesWritten();
+}
+
 void ConnectionHandler::on_Socket_Ready_Read()
 {
     auto socket = static_cast<QTcpSocket *>(sender());
@@ -109,9 +121,11 @@ void ConnectionHandler::readAuthRequest(QTcpSocket *socket)
     /* todo database */
     if (read.getPassword() == "")
     {
-        clients.insert(read.getLogin(), socket);
         writeAuthAnswer(socket, true);
         writeUserList(socket, clients.keys());
+        writeAboutNewConnection(read.getLogin());
+
+        clients.insert(read.getLogin(), socket);
         qDebug() << getIPv4AddrString(socket) << "authentication successful. Accepted.";
     }
     else
@@ -119,9 +133,7 @@ void ConnectionHandler::readAuthRequest(QTcpSocket *socket)
         writeAuthAnswer(socket, false);
         qDebug() << getIPv4AddrString(socket) << "authentication usuccessful. Aborted.";
     }
-
 }
-
 
 void ConnectionHandler::writeAuthAnswer(QTcpSocket *socket, bool answer)
 {
@@ -134,6 +146,20 @@ void ConnectionHandler::writeUserList(QTcpSocket *socket, const QList<QString> &
     UserList participants(lst);
     write(socket, participants);
 }
+
+void ConnectionHandler::writeAboutNewConnection(const QString &connected)
+{
+    UserData connectedUser(connected);
+    for (auto &user : clients.values()) write(user, connectedUser, NewConnection);
+}
+
+void ConnectionHandler::writeAboutUserDisconnection(const QString &disconnected)
+{
+    UserData disconnectedUser(disconnected);
+    for (auto &user : clients.values()) write(user, disconnectedUser, Disconnection);
+}
+
+
 
 
 

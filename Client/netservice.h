@@ -3,7 +3,11 @@
 
 #include "authmenu.h"
 #include "chatwidget.h"
-#include "datahandler.h"
+
+#include "../Data/authanswer.h"
+#include "../Data/authdata.h"
+#include "../Data/userdata.h"
+#include "../Data/userlist.h"
 
 #include <QTcpSocket>
 #include <QHostAddress>
@@ -17,18 +21,23 @@ public:
     explicit NetService(QObject *parent = nullptr);
     virtual ~NetService();
 
+    void write(QTcpSocket *socket, BaseData &data);
+
 private slots:
 
     void onSignIn(const QString &username, const QString &password);
     void onSocketConnected();
     void onSocketDisconnected();
     void onConnectionTimeOut();
+    void onSocketReadyRead();
 
-    /* handling received userlist */
-    void onUserListRead(UserList &lst);
+private:
 
-    /* handling authentication answer from server */
-    void onAuthAnswerRead(AuthAnswer &ans);
+    void connectSocketSignals();
+    void readUserList(QDataStream &readStream);
+    void readAuthAnswer(QDataStream &readStream);
+    void readNewConnection(QDataStream &readStream);
+    void readDisconnection(QDataStream &readStream);
 
 private:
 
@@ -36,7 +45,6 @@ private:
     ChatWidget *chat;
     QTcpSocket *socket;
     QTimer *ctimer; // connection timer
-    DataHandler *dataManager;
     AuthData identifier;
 
 };

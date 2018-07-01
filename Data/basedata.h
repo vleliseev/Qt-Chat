@@ -5,6 +5,7 @@
 
 enum DataType : qint8
 {
+    None,
     Ping,
     AuthRequest,
     AuthResponse,

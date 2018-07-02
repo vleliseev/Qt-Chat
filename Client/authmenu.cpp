@@ -28,6 +28,14 @@ void AuthMenu::on_SignButton_clicked()
         this->setStatus("Login is empty.");
         return;
     }
+
+    if (ui->Login->text().contains(QRegExp("[^a-zA-Z0-9]")))
+    {
+        this->setStatus("Login contains forbidden characters.");
+        return;
+    }
+
+
     ui->SignButton->setEnabled(false);
     ui->Login->setEnabled(false);
     ui->Password->setEnabled(false);

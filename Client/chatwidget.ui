@@ -14,13 +14,18 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">
-background: rgb(28, 28, 28);
- 
+   <string notr="true">background: rgb(28, 28, 28);
 
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QListWidget::item:selected {
+}
+
+QListWidget::item:hover {
+}</string>
+   </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -53,8 +58,6 @@ background: rgb(28, 28, 28);
         </property>
         <property name="styleSheet">
          <string notr="true">color: silver;
-selection-color: none;
-
 border-width: 2px;
 border-style: solid;
 border-color: rgb(52, 52, 52);

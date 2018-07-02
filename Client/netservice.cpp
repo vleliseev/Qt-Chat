@@ -10,6 +10,8 @@ NetService::NetService(QObject *parent) :
 
     menu->show();
     chat->setVisible(false);
+    //chat->show();
+    //chat->addParticipant("asdad");
 
     connect(menu, SIGNAL(signIn(QString, QString)),
             this, SLOT(onSignIn(QString, QString)));

@@ -209,13 +209,6 @@ padding: 2px;
    <property name="nativeMenuBar">
     <bool>true</bool>
    </property>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>Settings</string>
-    </property>
-    <addaction name="actionTheme"/>
-   </widget>
-   <addaction name="menuSettings"/>
   </widget>
   <action name="actionTheme">
    <property name="text">

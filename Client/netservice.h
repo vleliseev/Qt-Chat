@@ -5,7 +5,6 @@
 #include "chatwidget.h"
 
 #include "../Data/authanswer.h"
-#include "../Data/authdata.h"
 #include "../Data/userdata.h"
 #include "../Data/userlist.h"
 
@@ -23,7 +22,6 @@ public:
 
     /* writing data to server by socket */
     void write(QTcpSocket *socket, const BaseData &data);
-    void write(QTcpSocket *socket, const UserData &data, DataType type);
 
 private slots:
 

@@ -44,7 +44,8 @@ void ConnectionHandler::on_Client_Disconnection()
     auto disconnectedSocket = static_cast<QTcpSocket *>(sender());
     auto username = clients.key(disconnectedSocket);
     clients.remove(username);
-    writeAboutUserDisconnection(username.getUsername());
+    username.setType(Disconnection);
+    writeAboutUserDisconnection(username);
 }
 
 bool ConnectionHandler::isListening() const
@@ -82,30 +83,17 @@ void ConnectionHandler::write(QTcpSocket *socket, const BaseData &from)
     socket->waitForBytesWritten();
 }
 
-void ConnectionHandler::write(QTcpSocket *socket, const UserData &data, DataType type)
-{
-    QByteArray datagram;
-    QDataStream writeStream(&datagram, QIODevice::WriteOnly);
-    qint16 size = sizeof(qint8) + data.size();
-    writeStream << size << (qint8)type;
-    writeStream << data;
-    socket->write(datagram);
-    socket->waitForBytesWritten();
-}
-
 void ConnectionHandler::on_Socket_Ready_Read()
 {
     auto socket = static_cast<QTcpSocket *>(sender());
     QDataStream readStream(socket);
     qint16 sizeRead;
     qint8 type;
-
     readStream >> sizeRead;
 
     /* waiting till we get full data */
     if (socket->bytesAvailable() < sizeRead) return;
     readStream >> type;
-
     if (type == DataType::AuthRequest)
         readAuthRequest(socket);
 }
@@ -121,6 +109,7 @@ void ConnectionHandler::readAuthRequest(QTcpSocket *socket)
     /* todo database */
     if (read.getPassword() == "")
     {
+        read.setType(DataType::NewConnection);
         writeAuthAnswer(socket, true);
         writeUserList(socket, clients.keys());
         writeAboutNewConnection(read);
@@ -149,12 +138,12 @@ void ConnectionHandler::writeUserList(QTcpSocket *socket, const QList<UserData> 
 
 void ConnectionHandler::writeAboutNewConnection(const UserData &connectedUser)
 {
-    for (auto &user : clients.values()) write(user, connectedUser, NewConnection);
+    for (auto &user : clients.values()) write(user, connectedUser);
 }
 
 void ConnectionHandler::writeAboutUserDisconnection(const UserData &disconnectedUser)
 {
-    for (auto &user : clients.values()) write(user, disconnectedUser, Disconnection);
+    for (auto &user : clients.values()) write(user, disconnectedUser);
 }
 
 

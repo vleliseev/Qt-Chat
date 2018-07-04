@@ -24,6 +24,8 @@ public:
     void setColor(const QColor &color);
     /* set user pasword */
     void setPassword(const QString &password);
+    /* set current datatype */
+    void setType(const DataType type);
 
     QString getUsername() const;
     QString getPassword() const;
@@ -42,6 +44,7 @@ private:
     QString password;
     QFont userFont;
     QColor userColor;
+    DataType currentType;
 };
 
 /* compare order for UserData if it is a key in QMap */

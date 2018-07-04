@@ -31,7 +31,7 @@ size_t UserData::size() const
 
 DataType UserData::type() const
 {
-    return None;
+    return currentType;
 }
 
 void UserData::setUsername(const QString &username)
@@ -52,6 +52,11 @@ void UserData::setFont(const QFont &font)
 void UserData::setColor(const QColor &color)
 {
     userColor = color;
+}
+
+void UserData::setType(const DataType type)
+{
+    currentType = type;
 }
 
 QString UserData::getUsername() const

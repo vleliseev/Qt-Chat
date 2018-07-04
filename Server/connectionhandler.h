@@ -8,7 +8,6 @@
 #include <QString>
 
 #include "../Data/authanswer.h"
-#include "../Data/authdata.h"
 #include "../Data/userlist.h"
 #include "../Data/userdata.h"
 
@@ -22,7 +21,6 @@ public:
     void stopServer();
     bool isListening() const;
     void write(QTcpSocket *socket, const BaseData &from);
-    void write(QTcpSocket *socket, const UserData &data, DataType type);
 
     ~ConnectionHandler();
 

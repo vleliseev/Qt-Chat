@@ -18,9 +18,7 @@ void ChatWidget::addParticipant(const UserData &username)
 {
     auto participant = new QListWidgetItem;
     participant->setFont(username.getFont());
-    qDebug() << username.getFont();
     participant->setTextColor(username.getColor());
-    qDebug() << username.getColor();
     participant->setText(username.getUsername());
     ui->Users->addItem(participant);
 }

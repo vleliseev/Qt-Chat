@@ -1,7 +1,6 @@
 #ifndef USERLIST_H
 #define USERLIST_H
 
-#include "authdata.h"
 #include "userdata.h"
 
 class UserList : public BaseData

@@ -44,7 +44,7 @@ void ConnectionHandler::on_Client_Disconnection()
     auto disconnectedSocket = static_cast<QTcpSocket *>(sender());
     auto username = clients.key(disconnectedSocket);
     clients.remove(username);
-    writeAboutUserDisconnection(username);
+    writeAboutUserDisconnection(username.getUsername());
 }
 
 bool ConnectionHandler::isListening() const
@@ -71,7 +71,7 @@ QString ConnectionHandler::getIPv4AddrString(QTcpSocket *socket)
 }
 
 
-void ConnectionHandler::write(QTcpSocket *socket, BaseData &from)
+void ConnectionHandler::write(QTcpSocket *socket, const BaseData &from)
 {
     QByteArray datagram;
     QDataStream writeStream(&datagram, QIODevice::WriteOnly);
@@ -82,7 +82,7 @@ void ConnectionHandler::write(QTcpSocket *socket, BaseData &from)
     socket->waitForBytesWritten();
 }
 
-void ConnectionHandler::write(QTcpSocket *socket, UserData &data, DataType type)
+void ConnectionHandler::write(QTcpSocket *socket, const UserData &data, DataType type)
 {
     QByteArray datagram;
     QDataStream writeStream(&datagram, QIODevice::WriteOnly);
@@ -114,7 +114,7 @@ void ConnectionHandler::on_Socket_Ready_Read()
 void ConnectionHandler::readAuthRequest(QTcpSocket *socket)
 {
     QDataStream readStream(socket);
-    AuthData read;
+    UserData read;
     readStream >> read;
 
     /* checking password */
@@ -123,9 +123,9 @@ void ConnectionHandler::readAuthRequest(QTcpSocket *socket)
     {
         writeAuthAnswer(socket, true);
         writeUserList(socket, clients.keys());
-        writeAboutNewConnection(read.getLogin());
+        writeAboutNewConnection(read);
 
-        clients.insert(read.getLogin(), socket);
+        clients.insert(read, socket);
         qDebug() << getIPv4AddrString(socket) << "authentication successful. Accepted.";
     }
     else
@@ -141,21 +141,19 @@ void ConnectionHandler::writeAuthAnswer(QTcpSocket *socket, bool answer)
     write(socket, ans);
 }
 
-void ConnectionHandler::writeUserList(QTcpSocket *socket, const QList<QString> &lst)
+void ConnectionHandler::writeUserList(QTcpSocket *socket, const QList<UserData> &lst)
 {
     UserList participants(lst);
     write(socket, participants);
 }
 
-void ConnectionHandler::writeAboutNewConnection(const QString &connected)
+void ConnectionHandler::writeAboutNewConnection(const UserData &connectedUser)
 {
-    UserData connectedUser(connected);
     for (auto &user : clients.values()) write(user, connectedUser, NewConnection);
 }
 
-void ConnectionHandler::writeAboutUserDisconnection(const QString &disconnected)
+void ConnectionHandler::writeAboutUserDisconnection(const UserData &disconnectedUser)
 {
-    UserData disconnectedUser(disconnected);
     for (auto &user : clients.values()) write(user, disconnectedUser, Disconnection);
 }
 

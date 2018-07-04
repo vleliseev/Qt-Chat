@@ -1,10 +1,6 @@
 #include "basedata.h"
 
-BaseData::BaseData()
-{ }
-
-
-QDataStream &operator << (QDataStream &stream, BaseData &data)
+QDataStream &operator << (QDataStream &stream, const BaseData &data)
 {
     return data.toStream(stream);
 }

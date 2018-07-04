@@ -4,7 +4,7 @@ AuthAnswer::AuthAnswer(bool answer) :
     answer(answer)
 { }
 
-QDataStream& AuthAnswer::toStream(QDataStream &stream)
+QDataStream& AuthAnswer::toStream(QDataStream &stream) const
 {
     stream << answer;
     return stream;
@@ -16,12 +16,12 @@ QDataStream& AuthAnswer::fromStream(QDataStream &stream)
     return stream;
 }
 
-size_t AuthAnswer::size()
+size_t AuthAnswer::size() const
 {
     return sizeof(bool);
 }
 
-DataType AuthAnswer::type()
+DataType AuthAnswer::type() const
 {
     return DataType::AuthResponse;
 }

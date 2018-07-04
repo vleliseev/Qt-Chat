@@ -21,11 +21,16 @@ public:
     explicit NetService(QObject *parent = nullptr);
     virtual ~NetService();
 
-    void write(QTcpSocket *socket, BaseData &data);
+    /* writing data to server by socket */
+    void write(QTcpSocket *socket, const BaseData &data);
+    void write(QTcpSocket *socket, const UserData &data, DataType type);
 
 private slots:
 
+    /* slot handles clicking "Sing in" button in auth menu */
     void onSignIn(const QString &username, const QString &password);
+
+
     void onSocketConnected();
     void onSocketDisconnected();
     void onConnectionTimeOut();
@@ -45,7 +50,7 @@ private:
     ChatWidget *chat;
     QTcpSocket *socket;
     QTimer *ctimer; // connection timer
-    AuthData identifier;
+    UserData identifier;
 
 };
 

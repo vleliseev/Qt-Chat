@@ -1,6 +1,7 @@
 #include "chatwidget.h"
 #include "ui_chatwidget.h"
 
+#include <QDebug>
 ChatWidget::ChatWidget(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ChatWidget)
@@ -13,9 +14,15 @@ ChatWidget::~ChatWidget()
     delete ui;
 }
 
-void ChatWidget::addParticipant(const QString &username)
+void ChatWidget::addParticipant(const UserData &username)
 {
-    ui->Users->addItem(username);
+    auto participant = new QListWidgetItem;
+    participant->setFont(username.getFont());
+    qDebug() << username.getFont();
+    participant->setTextColor(username.getColor());
+    qDebug() << username.getColor();
+    participant->setText(username.getUsername());
+    ui->Users->addItem(participant);
 }
 
 void ChatWidget::addMessage(const QString &msg)

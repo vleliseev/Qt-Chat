@@ -36,7 +36,7 @@ NetService::~NetService()
 
 void NetService::onSignIn(const QString &username, const QString &password)
 {
-    identifier.setLogin(username);
+    identifier.setUsername(username);
     identifier.setPassword(password);
     socket->connectToHost(QHostAddress::LocalHost, 8001);
     ctimer->start(10000); // 10 seconds for connection try
@@ -45,7 +45,7 @@ void NetService::onSignIn(const QString &username, const QString &password)
 void NetService::onSocketConnected()
 {
     ctimer->stop();
-    write(socket, identifier);
+    write(socket, identifier, DataType::AuthRequest);
 }
 
 void NetService::onSocketDisconnected()
@@ -87,7 +87,7 @@ void NetService::readNewConnection(QDataStream &readStream)
 {
     UserData user;
     readStream >> user;
-    chat->addParticipant(user.getUsername());
+    chat->addParticipant(user);
 }
 
 void NetService::readDisconnection(QDataStream &readStream)
@@ -97,12 +97,23 @@ void NetService::readDisconnection(QDataStream &readStream)
     chat->removeParticipant(user.getUsername());
 }
 
-void NetService::write(QTcpSocket *socket, BaseData &data)
+void NetService::write(QTcpSocket *socket, const BaseData &data)
 {
     QByteArray datagram;
     QDataStream writeStream(&datagram, QIODevice::WriteOnly);
     qint16 size = sizeof(qint8) + data.size();
     writeStream << size << (qint8)data.type();
+    writeStream << data;
+    socket->write(datagram);
+    socket->waitForBytesWritten();
+}
+
+void NetService::write(QTcpSocket *socket, const UserData &data, DataType type)
+{
+    QByteArray datagram;
+    QDataStream writeStream(&datagram, QIODevice::WriteOnly);
+    qint16 size = sizeof(qint8) + data.size();
+    writeStream << size << (qint8)type;
     writeStream << data;
     socket->write(datagram);
     socket->waitForBytesWritten();

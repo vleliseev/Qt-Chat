@@ -9,10 +9,10 @@ public:
     AuthAnswer(bool answer);
     AuthAnswer() = default;
 
-    virtual QDataStream& toStream(QDataStream &stream) override;
+    virtual QDataStream& toStream(QDataStream &stream) const override;
     virtual QDataStream& fromStream(QDataStream &stream) override;
-    virtual size_t size() override;
-    virtual DataType type() override;
+    virtual size_t size() const override;
+    virtual DataType type() const override;
 
     /* returns true on successful authentication */
     bool isSigned() const;

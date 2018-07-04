@@ -21,8 +21,8 @@ public:
     void startServer();
     void stopServer();
     bool isListening() const;
-    void write(QTcpSocket *socket, BaseData &from);
-    void write(QTcpSocket *socket, UserData &data, DataType type);
+    void write(QTcpSocket *socket, const BaseData &from);
+    void write(QTcpSocket *socket, const UserData &data, DataType type);
 
     ~ConnectionHandler();
 
@@ -37,17 +37,17 @@ private:
 
     void readAuthRequest(QTcpSocket *socket);
     void writeAuthAnswer(QTcpSocket *socket, bool answer);
-    void writeUserList(QTcpSocket *socket,const QList<QString> &lst);
+    void writeUserList(QTcpSocket *socket, const QList<UserData> &lst);
 
-    void writeAboutNewConnection(const QString &connected);
-    void writeAboutUserDisconnection(const QString &disconnected);
+    void writeAboutNewConnection(const UserData &connectedUser);
+    void writeAboutUserDisconnection(const UserData &disconnectedUser);
 
     QString getIPv4AddrString(QTcpSocket *socket);
     void connectSocketSignals(QTcpSocket *socket);
 
 private:
 
-    QMap<QString, QTcpSocket*> clients;
+    QMap<UserData, QTcpSocket*> clients;
     QTcpServer *serv;
 };
 

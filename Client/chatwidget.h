@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "../Data/userlist.h"
+#include "../Data/userdata.h"
 
 namespace Ui {
 class ChatWidget;
@@ -15,7 +16,7 @@ class ChatWidget : public QMainWindow
 public:
     explicit ChatWidget(QWidget *parent = 0);
 
-    void addParticipant(const QString &username);
+    void addParticipant(const UserData &username);
     void removeParticipant(const QString &username);
     void addParticipants(const UserList &lst);
     void addMessage(const QString &msg);

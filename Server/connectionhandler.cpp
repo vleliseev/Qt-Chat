@@ -72,13 +72,14 @@ QString ConnectionHandler::getIPv4AddrString(QTcpSocket *socket)
 }
 
 
-void ConnectionHandler::write(QTcpSocket *socket, const BaseData &from)
+void ConnectionHandler::write(QTcpSocket *socket, const BaseData &data)
 {
     QByteArray datagram;
     QDataStream writeStream(&datagram, QIODevice::WriteOnly);
-    qint16 size = sizeof(qint8) + from.size(); // sizeof(qint8) is size of DataType
-    writeStream << size << (qint8)from.type();
-    writeStream << from;
+    writeStream << qint16(0) << (qint8)data.type();
+    writeStream << data;
+    writeStream.device()->seek(0);
+    writeStream << qint16(datagram.size() - sizeof(qint16)); // writing data size
     socket->write(datagram);
     socket->waitForBytesWritten();
 }

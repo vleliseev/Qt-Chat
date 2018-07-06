@@ -24,11 +24,6 @@ QDataStream& UserData::fromStream(QDataStream &stream)
     return stream;
 }
 
-size_t UserData::size() const
-{
-    return username.size();
-}
-
 DataType UserData::type() const
 {
     return currentType;

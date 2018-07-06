@@ -16,11 +16,6 @@ QDataStream& AuthAnswer::fromStream(QDataStream &stream)
     return stream;
 }
 
-size_t AuthAnswer::size() const
-{
-    return sizeof(bool);
-}
-
 DataType AuthAnswer::type() const
 {
     return DataType::AuthResponse;

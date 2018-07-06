@@ -21,6 +21,7 @@ public:
     virtual ~NetService();
 
     /* writing data to server by socket */
+    /* !!! data classes contain insecure serialization !!! */
     void write(QTcpSocket *socket, const BaseData &data);
 
 private slots:

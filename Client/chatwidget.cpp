@@ -1,7 +1,6 @@
 #include "chatwidget.h"
 #include "ui_chatwidget.h"
 
-#include <QDebug>
 ChatWidget::ChatWidget(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ChatWidget)
@@ -23,11 +22,12 @@ void ChatWidget::addParticipant(const UserData &username)
     ui->Users->addItem(participant);
 }
 
-void ChatWidget::addMessage(const QString &msg)
+void ChatWidget::addMessage(const Message &msg)
 {
     auto item = new QListWidgetItem;
-    item->setTextColor(Qt::red);
-    item->setText(msg);
+    item->setTextColor(msg.getTextColor());
+    item->setFont(msg.getTextFont());
+    item->setText(msg.getSender() + ":" + msg.getMessage());
     ui->Dialog_2->addItem(item);
 }
 
@@ -41,4 +41,23 @@ void ChatWidget::removeParticipant(const QString &username)
 {
     auto removeItem = ui->Users->findItems(username, Qt::MatchFixedString).at(0);
     delete removeItem;
+}
+
+void ChatWidget::on_SendButton_clicked()
+{
+    auto text = ui->MessageLine->toPlainText();
+    if (text.isEmpty()) return;
+
+    /* todo: user can select font and color of his message */
+    /* msg.setTextColor(...); msg.setFontColor(...); */
+    /* todo: user can upload any image from computer and send it */
+    /* msg.setImage(...); */
+
+    /* add message to UI */
+    Message msg("You", text);
+    addMessage(msg);
+    ui->MessageLine->clear();
+
+    /* send message to server */
+    emit messageSent(msg);
 }

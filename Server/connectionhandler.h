@@ -10,6 +10,7 @@
 #include "../Data/authanswer.h"
 #include "../Data/userlist.h"
 #include "../Data/userdata.h"
+#include "../Data/message.h"
 
 class ConnectionHandler : public QObject
 {
@@ -34,9 +35,10 @@ private slots:
 private:
 
     void readAuthRequest(QTcpSocket *socket);
+    void readMessage(QTcpSocket *socket);
     void writeAuthAnswer(QTcpSocket *socket, bool answer);
     void writeUserList(QTcpSocket *socket, const QList<UserData> &lst);
-
+    void sendOutMessage(QTcpSocket *sender, const Message &msg);
     void writeAboutNewConnection(const UserData &connectedUser);
     void writeAboutUserDisconnection(const UserData &disconnectedUser);
 

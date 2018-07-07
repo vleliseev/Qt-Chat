@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "../Data/userlist.h"
 #include "../Data/userdata.h"
+#include "../Data/message.h"
 
 namespace Ui {
 class ChatWidget;
@@ -19,9 +20,18 @@ public:
     void addParticipant(const UserData &username);
     void removeParticipant(const QString &username);
     void addParticipants(const UserList &lst);
-    void addMessage(const QString &msg);
+    void addMessage(const Message &msg);
 
     ~ChatWidget();
+
+private slots:
+
+    void on_SendButton_clicked();
+
+signals:
+
+    void messageSent(Message &msg);
+
 
 private:
     Ui::ChatWidget *ui;

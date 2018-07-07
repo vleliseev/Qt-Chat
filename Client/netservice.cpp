@@ -11,9 +11,9 @@ NetService::NetService(QObject *parent) :
     chat->setVisible(false);
 
     connectSocketSignals();
-    connect(menu, SIGNAL(signIn(QString, QString)),
-            this, SLOT(onSignIn(QString, QString)));
+    connect(menu, SIGNAL(signIn(QString, QString)), this, SLOT(onSignIn(QString, QString)));
     connect(ctimer, SIGNAL(timeout()), this, SLOT(onConnectionTimeOut()));
+    connect(chat, SIGNAL(messageSent(Message&)), this, SLOT(onMessageSent(Message&)));
 }
 
 void NetService::connectSocketSignals()
@@ -92,6 +92,13 @@ void NetService::readDisconnection(QDataStream &readStream)
     chat->removeParticipant(user.getUsername());
 }
 
+void NetService::readMessage(QDataStream &readStream)
+{
+    Message msg;
+    readStream >> msg;
+    chat->addMessage(msg);
+}
+
 void NetService::write(QTcpSocket *socket, const BaseData &data)
 {
     QByteArray datagram;
@@ -123,4 +130,12 @@ void NetService::onSocketReadyRead()
         readNewConnection(readStream);
     if (type == DataType::Disconnection)
         readDisconnection(readStream);
+    if (type == DataType::Msg)
+        readMessage(readStream);
+}
+
+void NetService::onMessageSent(Message &msg)
+{
+    msg.setSender(identifier.getUsername());
+    write(socket, msg);
 }

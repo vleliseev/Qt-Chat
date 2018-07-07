@@ -94,7 +94,7 @@ padding: 2px;</string>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QTextEdit" name="messageLine_2">
+         <widget class="QTextEdit" name="MessageLine">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -103,7 +103,7 @@ padding: 2px;</string>
           </property>
           <property name="minimumSize">
            <size>
-            <width>591</width>
+            <width>556</width>
             <height>61</height>
            </size>
           </property>
@@ -141,7 +141,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="SendButton_2">
+         <widget class="QPushButton" name="SendButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -164,6 +164,8 @@ p, li { white-space: pre-wrap; }
            <font>
             <family>Gadugi</family>
             <pointsize>12</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
            </font>
           </property>
           <property name="cursor">
@@ -185,6 +187,24 @@ padding: 2px;
           </property>
           <property name="text">
            <string>Send</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="ImgButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+image: url(&quot;:/Image/attach.png&quot;);
+background: none;
+outline:none;
+border:none;
+width: 32px;
+height: 48px;
+}
+</string>
+          </property>
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </item>

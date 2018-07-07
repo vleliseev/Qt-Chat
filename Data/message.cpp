@@ -1,16 +1,16 @@
 #include "message.h"
 
 Message::Message() :
-    textFont(QFont("Gadugi", 20)),
+    textFont(QFont("Gadugi", 15)),
     textColor(QColor(Qt::red))
 {   }
 
-Message::Message(const QString &receiver, const
-                 QString &message,
+Message::Message(const QString &sender,
+                 const QString &message,
                  const QFont &font,
                  const QColor &color,
                  const QPixmap &image) :
-    receiver(receiver),
+    sender(sender),
     message(message),
     textFont(font),
     textColor(color),
@@ -19,7 +19,7 @@ Message::Message(const QString &receiver, const
 
 QDataStream& Message::fromStream(QDataStream &stream)
 {
-    stream >> receiver;
+    stream >> sender;
     stream >> message;
     stream >> textFont;
     stream >> textColor;
@@ -34,7 +34,7 @@ DataType Message::type() const
 
 QDataStream& Message::toStream(QDataStream &stream) const
 {
-    stream << receiver;
+    stream << sender;
     stream << message;
     stream << textFont;
     stream << textColor;
@@ -42,14 +42,14 @@ QDataStream& Message::toStream(QDataStream &stream) const
     return stream;
 }
 
-void Message::setReceiver(const QString &receiver)
-{
-    this->receiver = receiver;
-}
-
 void Message::setMessage(const QString &message)
 {
     this->message = message;
+}
+
+void Message::setSender(const QString &sender)
+{
+    this->sender = sender;
 }
 
 void Message::setTextFont(const QFont &font)
@@ -67,15 +67,14 @@ void Message::setImage(const QPixmap &image)
     this->image = image;
 }
 
-
-QString Message::getReceiver() const
-{
-    return receiver;
-}
-
 QString Message::getMessage() const
 {
     return message;
+}
+
+QString Message::getSender() const
+{
+    return sender;
 }
 
 QFont Message::getTextFont() const

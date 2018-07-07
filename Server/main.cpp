@@ -12,6 +12,4 @@ int main(int argc, char **argv)
     netmanager.startServer();
 
     return app.exec();
-    //MainForm w;
-    //w.show();
 }

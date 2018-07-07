@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>Image/46.gif</file>
+        <file>Image/attach.png</file>
     </qresource>
 </RCC>

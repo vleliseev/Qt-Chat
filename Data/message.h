@@ -12,8 +12,8 @@ class Message : public BaseData
 public:
 
     Message();
-    Message(const QString &receiver, const QString &message = "",
-            const QFont &font = QFont("Gadugi", 20),
+    Message(const QString &sender, const QString &message = "",
+            const QFont &font = QFont("Gadugi", 15),
             const QColor &color = QColor(Qt::red),
             const QPixmap &image = QPixmap());
 
@@ -25,17 +25,17 @@ public:
     void setTextFont(const QFont &font);
     void setImage(const QPixmap &image);
     void setMessage(const QString &message);
-    void setReceiver(const QString &receiver);
+    void setSender(const QString &sender);
 
     QColor getTextColor() const;
     QFont getTextFont() const;
     QPixmap getImage() const;
     QString getMessage() const;
-    QString getReceiver() const;
+    QString getSender() const;
 
 private:
 
-    QString receiver;
+    QString sender;
     QString message;
     QFont textFont;
     QColor textColor;

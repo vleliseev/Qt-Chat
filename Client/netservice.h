@@ -29,11 +29,11 @@ private slots:
     /* slot handles clicking "Sing in" button in auth menu */
     void onSignIn(const QString &username, const QString &password);
 
-
     void onSocketConnected();
     void onSocketDisconnected();
     void onConnectionTimeOut();
     void onSocketReadyRead();
+    void onMessageSent(Message &msg);
 
 private:
 
@@ -42,6 +42,7 @@ private:
     void readAuthAnswer(QDataStream &readStream);
     void readNewConnection(QDataStream &readStream);
     void readDisconnection(QDataStream &readStream);
+    void readMessage(QDataStream &readStream);
 
 private:
 

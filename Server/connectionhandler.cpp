@@ -71,7 +71,6 @@ QString ConnectionHandler::getIPv4AddrString(QTcpSocket *socket)
     return IPv4;
 }
 
-
 void ConnectionHandler::write(QTcpSocket *socket, const BaseData &data)
 {
     QByteArray datagram;
@@ -97,8 +96,9 @@ void ConnectionHandler::on_Socket_Ready_Read()
     readStream >> type;
     if (type == DataType::AuthRequest)
         readAuthRequest(socket);
+    if (type == DataType::Msg)
+        readMessage(socket);
 }
-
 
 void ConnectionHandler::readAuthRequest(QTcpSocket *socket)
 {
@@ -145,6 +145,23 @@ void ConnectionHandler::writeAboutNewConnection(const UserData &connectedUser)
 void ConnectionHandler::writeAboutUserDisconnection(const UserData &disconnectedUser)
 {
     for (auto &user : clients.values()) write(user, disconnectedUser);
+}
+
+void ConnectionHandler::sendOutMessage(QTcpSocket *sender, const Message &msg)
+{
+    auto senderUsername = clients.key(sender).getUsername();
+    for (auto &user : clients.values())
+        /* prevent writing message to its sender */
+        if (clients.key(user).getUsername() != senderUsername)
+            write(user, msg);
+}
+
+void ConnectionHandler::readMessage(QTcpSocket *socket)
+{
+    QDataStream readStream(socket);
+    Message read;
+    readStream >> read;
+    sendOutMessage(socket, read);
 }
 
 

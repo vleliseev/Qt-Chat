@@ -6,6 +6,7 @@ ChatWidget::ChatWidget(QWidget *parent) :
     ui(new Ui::ChatWidget)
 {
     ui->setupUi(this);
+    ui->LoadedImages->setVisible(false);
 }
 
 ChatWidget::~ChatWidget()
@@ -50,14 +51,38 @@ void ChatWidget::on_SendButton_clicked()
 
     /* todo: user can select font and color of his message */
     /* msg.setTextColor(...); msg.setFontColor(...); */
-    /* todo: user can upload any image from computer and send it */
-    /* msg.setImage(...); */
 
-    /* add message to UI */
+    /* reading text from UI */
     Message msg("You", text);
+
+    /* adding loaded image if it exists */
+    if (!bufferedImage.isNull())
+        msg.setImage(bufferedImage);
+
+    /* set message to dialog UI */
     addMessage(msg);
+
+    /* clear message line and loaded image label */
     ui->MessageLine->clear();
+    ui->LoadedImages->clear();
+    ui->LoadedImages->setVisible(false);
 
     /* send message to server */
     emit messageSent(msg);
+
+    /* clear buffered image */
+    bufferedImage = QPixmap();
+}
+
+void ChatWidget::on_loadImageButton_clicked()
+{
+    auto path = QFileDialog::getOpenFileName(this, tr("Open image"),
+                                             "", tr("*.png *.jpg *.jpeg"));
+    auto imageName = path.split("/").last();
+    QImage img;
+    img.load(path);
+    bufferedImage.fromImage(img);
+
+    ui->LoadedImages->setVisible(true);
+    ui->LoadedImages->setText("Selected image: " + imageName);
 }

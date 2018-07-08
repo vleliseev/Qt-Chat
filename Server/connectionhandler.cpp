@@ -163,8 +163,3 @@ void ConnectionHandler::readMessage(QTcpSocket *socket)
     readStream >> read;
     sendOutMessage(socket, read);
 }
-
-
-
-
-

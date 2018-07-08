@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>908</width>
+    <width>911</width>
     <height>587</height>
    </rect>
   </property>
@@ -191,7 +191,7 @@ padding: 2px;
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="ImgButton">
+         <widget class="QPushButton" name="loadImageButton">
           <property name="styleSheet">
            <string notr="true">QPushButton {
 image: url(&quot;:/Image/attach.png&quot;);
@@ -210,6 +210,22 @@ height: 48px;
         </item>
        </layout>
       </item>
+      <item>
+       <widget class="QLabel" name="LoadedImages">
+        <property name="font">
+         <font>
+          <family>Gadugi</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:silver;</string>
+        </property>
+        <property name="text">
+         <string>Selected images:</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
@@ -219,9 +235,15 @@ height: 48px;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>908</width>
-     <height>20</height>
+     <width>911</width>
+     <height>25</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Gadugi</family>
+     <pointsize>12</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true"/>
@@ -229,6 +251,19 @@ height: 48px;
    <property name="nativeMenuBar">
     <bool>true</bool>
    </property>
+   <widget class="QMenu" name="menuSettings">
+    <property name="font">
+     <font>
+      <family>Gadugi</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionStyle"/>
+   </widget>
+   <addaction name="menuSettings"/>
   </widget>
   <action name="actionTheme">
    <property name="text">
@@ -236,6 +271,22 @@ height: 48px;
    </property>
    <property name="shortcutContext">
     <enum>Qt::WindowShortcut</enum>
+   </property>
+  </action>
+  <action name="actionSelect_color">
+   <property name="text">
+    <string>Select color</string>
+   </property>
+  </action>
+  <action name="actionStyle">
+   <property name="text">
+    <string>Style</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Gadugi</family>
+     <pointsize>12</pointsize>
+    </font>
    </property>
   </action>
  </widget>

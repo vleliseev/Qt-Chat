@@ -2,6 +2,9 @@
 #define CHATWIDGET_H
 
 #include <QMainWindow>
+#include <QFileDialog>
+#include <QImage>
+
 #include "../Data/userlist.h"
 #include "../Data/userdata.h"
 #include "../Data/message.h"
@@ -28,13 +31,16 @@ private slots:
 
     void on_SendButton_clicked();
 
+    void on_loadImageButton_clicked();
+
 signals:
 
     void messageSent(Message &msg);
 
-
 private:
+
     Ui::ChatWidget *ui;
+    QPixmap bufferedImage;
 };
 
 #endif // CHATWIDGET_H

@@ -33,7 +33,8 @@ SOURCES += \
     ../Data/basedata.cpp \
     ../Data/userlist.cpp \
     ../Data/userdata.cpp \
-    ../Data/message.cpp
+    ../Data/message.cpp \
+    styledialog.cpp
 
 HEADERS += \
         authmenu.h \
@@ -43,11 +44,13 @@ HEADERS += \
     ../Data/basedata.h \
     ../Data/userlist.h \
     ../Data/userdata.h \
-    ../Data/message.h
+    ../Data/message.h \
+    styledialog.h
 
 FORMS += \
         authmenu.ui \
-    chatwidget.ui
+    chatwidget.ui \
+    styledialog.ui
 
 RESOURCES += \
     qrc.qrc

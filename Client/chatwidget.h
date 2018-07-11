@@ -8,6 +8,7 @@
 #include "../Data/userlist.h"
 #include "../Data/userdata.h"
 #include "../Data/message.h"
+#include "styledialog.h"
 
 namespace Ui {
 class ChatWidget;
@@ -30,8 +31,9 @@ public:
 private slots:
 
     void on_SendButton_clicked();
-
     void on_loadImageButton_clicked();
+
+    void onStyleChanged(QFont &font, QColor &color);
 
 signals:
 
@@ -39,8 +41,10 @@ signals:
 
 private:
 
+    UserData style;
     Ui::ChatWidget *ui;
     QPixmap bufferedImage;
+    StyleDialog dlg;
 };
 
 #endif // CHATWIDGET_H

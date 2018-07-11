@@ -7,6 +7,13 @@ ChatWidget::ChatWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->LoadedImages->setVisible(false);
+
+
+    connect(ui->actionStyle, SIGNAL(triggered(bool)),
+            &dlg, SLOT(open()));
+
+    connect(&dlg, SIGNAL(styleChanged(QFont&,QColor&)),
+            this, SLOT(onStyleChanged(QFont&,QColor&)));
 }
 
 ChatWidget::~ChatWidget()
@@ -53,7 +60,7 @@ void ChatWidget::on_SendButton_clicked()
     /* msg.setTextColor(...); msg.setFontColor(...); */
 
     /* reading text from UI */
-    Message msg("You", text);
+    Message msg("You", text, style.getFont(), style.getColor());
 
     /* adding loaded image if it exists */
     if (!bufferedImage.isNull())
@@ -85,4 +92,10 @@ void ChatWidget::on_loadImageButton_clicked()
 
     ui->LoadedImages->setVisible(true);
     ui->LoadedImages->setText("Selected image: " + imageName);
+}
+
+void ChatWidget::onStyleChanged(QFont &font, QColor &color)
+{
+    style.setFont(font);
+    style.setColor(color);
 }

@@ -21,9 +21,12 @@
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">QListWidget::item:selected {
+	background: none;
+	color: none;
 }
 
 QListWidget::item:hover {
+	background: none;
 }</string>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3">

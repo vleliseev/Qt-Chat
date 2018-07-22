@@ -8,12 +8,8 @@ ChatWidget::ChatWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->LoadedImages->setVisible(false);
 
-
-    connect(ui->actionStyle, SIGNAL(triggered(bool)),
-            &dlg, SLOT(open()));
-
-    connect(&dlg, SIGNAL(styleChanged(QFont&,QColor&)),
-            this, SLOT(onStyleChanged(QFont&,QColor&)));
+    connect(ui->actionStyle, SIGNAL(triggered(bool)), &dlg, SLOT(open()));
+    connect(&dlg, SIGNAL(styleChanged(QFont&,QColor&)), this, SLOT(onStyleChanged(QFont&,QColor&)));
 }
 
 ChatWidget::~ChatWidget()
@@ -27,6 +23,8 @@ void ChatWidget::addParticipant(const UserData &username)
     participant->setFont(username.getFont());
     participant->setTextColor(username.getColor());
     participant->setText(username.getUsername());
+    /* make item non-selectable */
+    participant->setFlags(participant->flags() & ~Qt::ItemIsSelectable);
     ui->Users->addItem(participant);
 }
 
@@ -36,6 +34,8 @@ void ChatWidget::addMessage(const Message &msg)
     item->setTextColor(msg.getTextColor());
     item->setFont(msg.getTextFont());
     item->setText(msg.getSender() + ":" + msg.getMessage());
+    /* make item non-selectable */
+    item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
     ui->Dialog_2->addItem(item);
 }
 

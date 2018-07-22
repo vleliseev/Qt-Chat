@@ -1,4 +1,4 @@
-# newrep
+# Qt-Chat
 
 Network chat application written with the help of Qt 5.10 framework (Core, GUI, Network modules).
 You are able to open \*.pro files (server and client are two different projects) in Qt Creator and make changes to source code, recompile, etc.

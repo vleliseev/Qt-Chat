@@ -17,6 +17,8 @@ Message::Message(const QString &sender,
     image(image)
 {   }
 
+
+
 QDataStream& Message::fromStream(QDataStream &stream)
 {
     stream >> sender;
@@ -27,10 +29,14 @@ QDataStream& Message::fromStream(QDataStream &stream)
     return stream;
 }
 
+
+
 DataType Message::type() const
 {
     return DataType::Msg;
 }
+
+
 
 QDataStream& Message::toStream(QDataStream &stream) const
 {
@@ -42,50 +48,66 @@ QDataStream& Message::toStream(QDataStream &stream) const
     return stream;
 }
 
-void Message::setMessage(const QString &message)
+
+
+void
+Message::setMessage(const QString &message)
 {
     this->message = message;
 }
 
-void Message::setSender(const QString &sender)
+
+void
+Message::setSender(const QString &sender)
 {
     this->sender = sender;
 }
 
-void Message::setTextFont(const QFont &font)
+
+void
+Message::setTextFont(const QFont &font)
 {
     textFont = font;
 }
 
-void Message::setTextColor(const QColor &color)
+
+void
+Message::setTextColor(const QColor &color)
 {
     textColor = color;
 }
 
-void Message::setImage(const QPixmap &image)
+
+void
+Message::setImage(const QPixmap &image)
 {
     this->image = image;
 }
+
 
 QString Message::getMessage() const
 {
     return message;
 }
 
+
 QString Message::getSender() const
 {
     return sender;
 }
+
 
 QFont Message::getTextFont() const
 {
     return textFont;
 }
 
+
 QColor Message::getTextColor() const
 {
     return textColor;
 }
+
 
 QPixmap Message::getImage() const
 {

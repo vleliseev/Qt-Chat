@@ -14,6 +14,7 @@ class AuthMenu : public QMainWindow
     Q_OBJECT
 
 public:
+
     explicit AuthMenu(QWidget *parent = 0);
     ~AuthMenu();
 

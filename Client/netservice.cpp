@@ -1,7 +1,7 @@
 #include "netservice.h"
 
-NetService::NetService(QObject *parent) :
-    QObject(parent),
+NetService::NetService(QObject *parent)
+    : QObject(parent),
     menu(new AuthMenu()),
     chat(new ChatWidget()),
     socket(new QTcpSocket(this)),
@@ -11,16 +11,15 @@ NetService::NetService(QObject *parent) :
     chat->setVisible(false);
 
     connectSocketSignals();
-    connect(menu, SIGNAL(signIn(QString, QString)), this, SLOT(onSignIn(QString, QString)));
-    connect(ctimer, SIGNAL(timeout()), this, SLOT(onConnectionTimeOut()));
-    connect(chat, SIGNAL(messageSent(Message&)), this, SLOT(onMessageSent(Message&)));
-}
 
-void NetService::connectSocketSignals()
-{
-    connect(socket, SIGNAL(connected()), this, SLOT(onSocketConnected()));
-    connect(socket, SIGNAL(disconnected()), this, SLOT(onSocketDisconnected()));
-    connect(socket, SIGNAL(readyRead()), this, SLOT(onSocketReadyRead()));
+    connect(menu, SIGNAL(signIn(QString, QString)),
+            this, SLOT(onSignIn(QString, QString)));
+
+    connect(ctimer, SIGNAL(timeout()),
+            this, SLOT(onConnectionTimeOut()));
+
+    connect(chat, SIGNAL(messageSent(Message&)),
+            this, SLOT(onMessageSent(Message&)));
 }
 
 NetService::~NetService()
@@ -29,37 +28,67 @@ NetService::~NetService()
     delete chat;
 }
 
-void NetService::onSignIn(const QString &username, const QString &password)
+
+
+void
+NetService::connectSocketSignals()
+{
+    connect(socket, SIGNAL(connected()), this, SLOT(onSocketConnected()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(onSocketDisconnected()));
+    connect(socket, SIGNAL(readyRead()), this, SLOT(onSocketReadyRead()));
+}
+
+
+
+void
+NetService::onSignIn(const QString &username, const QString &password)
 {
     identifier.setUsername(username);
     identifier.setPassword(password);
+
+    // Connect to server and write auth data on success
+    // see onSocketConnected() slot
     socket->connectToHost(QHostAddress::LocalHost, 8001);
-    ctimer->start(10000); // 10 seconds for connection try
+
+    // Create 10 seconds timer for waiting server response
+    ctimer->start(10000);
 }
 
-void NetService::onSocketConnected()
+
+
+void
+NetService::onSocketConnected()
 {
     ctimer->stop();
     identifier.setType(DataType::AuthRequest);
     write(socket, identifier);
 }
 
-void NetService::onSocketDisconnected()
+
+
+void
+NetService::onSocketDisconnected()
 {
     socket->abort();
 }
 
-void NetService::onConnectionTimeOut()
+
+
+void
+NetService::onConnectionTimeOut()
 {
     socket->abort();
     menu->setStatus("Connection timeout.");
 }
 
 
-void NetService::readAuthAnswer(QDataStream &readStream)
+
+void
+NetService::readAuthAnswer(QDataStream &readStream)
 {
     AuthAnswer ans;
     readStream >> ans;
+
     if (!ans.isSigned())
     {
         menu->setStatus("Authentication error.");
@@ -71,35 +100,50 @@ void NetService::readAuthAnswer(QDataStream &readStream)
     chat->show();
 }
 
-void NetService::readUserList(QDataStream &readStream)
+
+
+void
+NetService::readUserList(QDataStream &readStream)
 {
     UserList lst;
     readStream >> lst;
     chat->addParticipants(lst);
 }
 
-void NetService::readNewConnection(QDataStream &readStream)
+
+
+void
+NetService::readNewConnection(QDataStream &readStream)
 {
     UserData user;
     readStream >> user;
     chat->addParticipant(user);
 }
 
-void NetService::readDisconnection(QDataStream &readStream)
+
+
+void
+NetService::readDisconnection(QDataStream &readStream)
 {
     UserData user;
     readStream >> user;
     chat->removeParticipant(user.getUsername());
 }
 
-void NetService::readMessage(QDataStream &readStream)
+
+
+void
+NetService::readMessage(QDataStream &readStream)
 {
     Message msg;
     readStream >> msg;
     chat->addMessage(msg);
 }
 
-void NetService::write(QTcpSocket *socket, const BaseData &data)
+
+
+void
+NetService::write(QTcpSocket *socket, const BaseData &data)
 {
     QByteArray datagram;
     QDataStream writeStream(&datagram, QIODevice::WriteOnly);
@@ -111,7 +155,10 @@ void NetService::write(QTcpSocket *socket, const BaseData &data)
     socket->waitForBytesWritten();
 }
 
-void NetService::onSocketReadyRead()
+
+
+void
+NetService::onSocketReadyRead()
 {
     auto socket = static_cast<QTcpSocket *>(sender());
     QDataStream readStream(socket);
@@ -134,7 +181,10 @@ void NetService::onSocketReadyRead()
         readMessage(readStream);
 }
 
-void NetService::onMessageSent(Message &msg)
+
+
+void
+NetService::onMessageSent(Message &msg)
 {
     msg.setSender(identifier.getUsername());
     write(socket, msg);

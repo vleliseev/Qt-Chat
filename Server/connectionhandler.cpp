@@ -9,25 +9,41 @@ ConnectionHandler::ConnectionHandler(QObject *parent) :
             this, SLOT(on_New_Connection()));
 }
 
-void ConnectionHandler::startServer()
+ConnectionHandler::~ConnectionHandler()
+{
+    delete serv;
+}
+
+
+void
+ConnectionHandler::startServer()
 {
     serv->listen(QHostAddress::Any, 8001);
 }
 
-void ConnectionHandler::stopServer()
+
+
+void
+ConnectionHandler::stopServer()
 {
     serv->close();
     clients.clear();
 }
 
-void ConnectionHandler::on_New_Connection()
+
+
+void
+ConnectionHandler::on_New_Connection()
 {
     auto client = serv->nextPendingConnection();
     connectSocketSignals(client);
     qDebug() << "New connection try from" << getIPv4AddrString(client) << "...";
 }
 
-void ConnectionHandler::connectSocketSignals(QTcpSocket *socket)
+
+
+void
+ConnectionHandler::connectSocketSignals(QTcpSocket *socket)
 {
     connect(socket, SIGNAL(readyRead()),
             this, SLOT(on_Socket_Ready_Read()));
@@ -39,7 +55,10 @@ void ConnectionHandler::connectSocketSignals(QTcpSocket *socket)
             this, SLOT(on_Socket_Error(QAbstractSocket::SocketError)));
 }
 
-void ConnectionHandler::on_Client_Disconnection()
+
+
+void
+ConnectionHandler::on_Client_Disconnection()
 {
     auto disconnectedSocket = static_cast<QTcpSocket *>(sender());
     auto username = clients.key(disconnectedSocket);
@@ -48,21 +67,23 @@ void ConnectionHandler::on_Client_Disconnection()
     writeAboutUserDisconnection(username);
 }
 
+
+
 bool ConnectionHandler::isListening() const
 {
     return serv->isListening();
 }
 
-ConnectionHandler::~ConnectionHandler()
-{
-    delete serv;
-}
 
-void ConnectionHandler::on_Socket_Error(QAbstractSocket::SocketError)
+
+void
+ConnectionHandler::on_Socket_Error(QAbstractSocket::SocketError)
 {
     auto socket = static_cast<QTcpSocket *>(sender());
     qDebug() << getIPv4AddrString(socket) << socket->errorString();
 }
+
+
 
 QString ConnectionHandler::getIPv4AddrString(QTcpSocket *socket)
 {
@@ -71,7 +92,10 @@ QString ConnectionHandler::getIPv4AddrString(QTcpSocket *socket)
     return IPv4;
 }
 
-void ConnectionHandler::write(QTcpSocket *socket, const BaseData &data)
+
+
+void
+ConnectionHandler::write(QTcpSocket *socket, const BaseData &data)
 {
     QByteArray datagram;
     QDataStream writeStream(&datagram, QIODevice::WriteOnly);
@@ -83,7 +107,10 @@ void ConnectionHandler::write(QTcpSocket *socket, const BaseData &data)
     socket->waitForBytesWritten();
 }
 
-void ConnectionHandler::on_Socket_Ready_Read()
+
+
+void
+ConnectionHandler::on_Socket_Ready_Read()
 {
     auto socket = static_cast<QTcpSocket *>(sender());
     QDataStream readStream(socket);
@@ -100,7 +127,10 @@ void ConnectionHandler::on_Socket_Ready_Read()
         readMessage(socket);
 }
 
-void ConnectionHandler::readAuthRequest(QTcpSocket *socket)
+
+
+void
+ConnectionHandler::readAuthRequest(QTcpSocket *socket)
 {
     QDataStream readStream(socket);
     UserData read;
@@ -125,29 +155,44 @@ void ConnectionHandler::readAuthRequest(QTcpSocket *socket)
     }
 }
 
-void ConnectionHandler::writeAuthAnswer(QTcpSocket *socket, bool answer)
+
+
+void
+ConnectionHandler::writeAuthAnswer(QTcpSocket *socket, bool answer)
 {
     AuthAnswer ans(answer);
     write(socket, ans);
 }
 
-void ConnectionHandler::writeUserList(QTcpSocket *socket, const QList<UserData> &lst)
+
+
+void
+ConnectionHandler::writeUserList(QTcpSocket *socket, const QList<UserData> &lst)
 {
     UserList participants(lst);
     write(socket, participants);
 }
 
-void ConnectionHandler::writeAboutNewConnection(const UserData &connectedUser)
+
+
+void
+ConnectionHandler::writeAboutNewConnection(const UserData &connectedUser)
 {
     for (auto &user : clients.values()) write(user, connectedUser);
 }
 
-void ConnectionHandler::writeAboutUserDisconnection(const UserData &disconnectedUser)
+
+
+void
+ConnectionHandler::writeAboutUserDisconnection(const UserData &disconnectedUser)
 {
     for (auto &user : clients.values()) write(user, disconnectedUser);
 }
 
-void ConnectionHandler::sendOutMessage(QTcpSocket *sender, const Message &msg)
+
+
+void
+ConnectionHandler::sendOutMessage(QTcpSocket *sender, const Message &msg)
 {
     auto senderUsername = clients.key(sender).getUsername();
     for (auto &user : clients.values())
@@ -156,7 +201,10 @@ void ConnectionHandler::sendOutMessage(QTcpSocket *sender, const Message &msg)
             write(user, msg);
 }
 
-void ConnectionHandler::readMessage(QTcpSocket *socket)
+
+
+void
+ConnectionHandler::readMessage(QTcpSocket *socket)
 {
     QDataStream readStream(socket);
     Message read;

@@ -1,19 +1,16 @@
 #include "authmenu.h"
 #include "ui_authmenu.h"
-
-
 #include <qDebug>
 
-AuthMenu::AuthMenu(QWidget *parent) :
-    QMainWindow(parent),
+
+AuthMenu::AuthMenu(QWidget *parent)
+    : QMainWindow(parent),
     ui(new Ui::AuthMenu)
 {
     ui->setupUi(this);
-
     ui->Login->setFont(QFont("Gadugi", 12));
     ui->Password->setFont(QFont("Gadugi", 12));
     ui->Password->setEchoMode(QLineEdit::Password);
-
 }
 
 AuthMenu::~AuthMenu()
@@ -21,32 +18,45 @@ AuthMenu::~AuthMenu()
     delete ui;
 }
 
-void AuthMenu::on_SignButton_clicked()
+
+void
+AuthMenu::on_SignButton_clicked()
 {
-    if (ui->Login->text().isEmpty())
+    auto login = ui->Login->text();
+    auto password = ui->Login->text();
+    auto forbiddenCharacters = new QRegExp("[^a-zA-Z0-9]");
+
+    if (login.isEmpty())
     {
         this->setStatus("Login is empty.");
         return;
     }
 
-    if (ui->Login->text().contains(QRegExp("[^a-zA-Z0-9]")))
+    if (login.contains(loginFilterPattern))
     {
         this->setStatus("Login contains forbidden characters.");
         return;
     }
 
-
+    // Disable all buttons while making request to server
     ui->SignButton->setEnabled(false);
     ui->Login->setEnabled(false);
     ui->Password->setEnabled(false);
 
+    // Show preloader gif until server response is catched
     auto preloader = new QMovie(":/Image/46.gif");
-    ui->Status->setMovie(preloader);
     preloader->start();
-    emit signIn(ui->Login->text(), ui->Password->text());
+    ui->Status->setMovie(preloader);
+
+    // Send signal with login and pass data
+    // to network handler
+    emit signIn(login, password);
 }
 
-void AuthMenu::setStatus(const QString &status)
+
+
+void
+AuthMenu::setStatus(const QString &status)
 {
     ui->Status->setText(status);
     ui->SignButton->setEnabled(true);
@@ -54,7 +64,10 @@ void AuthMenu::setStatus(const QString &status)
     ui->Password->setEnabled(true);
 }
 
-void AuthMenu::on_Login_returnPressed()
+
+
+void
+AuthMenu::on_Login_returnPressed()
 {
     on_SignButton_clicked();
 }

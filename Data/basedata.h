@@ -15,9 +15,11 @@ enum DataType : qint8
     Msg // 'Message' reduction
 };
 
+
 class BaseData
 {
 public:
+
     explicit BaseData() = default;
 
     friend QDataStream &operator >> (QDataStream &stream, BaseData &data);

@@ -9,6 +9,7 @@
 
 class Message : public BaseData
 {
+
 public:
 
     Message();
@@ -17,15 +18,18 @@ public:
             const QColor &color = QColor(Qt::red),
             const QPixmap &image = QPixmap());
 
+
     virtual QDataStream& toStream(QDataStream &stream) const override;
     virtual QDataStream& fromStream(QDataStream &stream) override;
     virtual DataType type() const override;
+
 
     void setTextColor(const QColor &color);
     void setTextFont(const QFont &font);
     void setImage(const QPixmap &image);
     void setMessage(const QString &message);
     void setSender(const QString &sender);
+
 
     QColor getTextColor() const;
     QFont getTextFont() const;

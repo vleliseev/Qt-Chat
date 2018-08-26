@@ -16,15 +16,11 @@ public:
              const QFont &font = QFont("Gadugi", 20),
              const QColor &color = Qt::red);
 
-    /* (username equals nickname) */
+
     void setUsername(const QString &username);
-    /* sets the font of nickname (how other users see it) */
     void setFont(const QFont &font);
-    /* sets the color of nickname */
     void setColor(const QColor &color);
-    /* set user pasword */
     void setPassword(const QString &password);
-    /* set current datatype */
     void setType(const DataType type);
 
     QString getUsername() const;
@@ -46,7 +42,7 @@ private:
     DataType currentType;
 };
 
-/* compare order for UserData if it is a key in QMap */
+// Compare order for UserData if it is a key in QMap
 bool operator <(const UserData &tmp1, const UserData &tmp2);
 
 

@@ -4,11 +4,15 @@ AuthAnswer::AuthAnswer(bool answer) :
     answer(answer)
 { }
 
+
+
 QDataStream& AuthAnswer::toStream(QDataStream &stream) const
 {
     stream << answer;
     return stream;
 }
+
+
 
 QDataStream& AuthAnswer::fromStream(QDataStream &stream)
 {
@@ -16,17 +20,24 @@ QDataStream& AuthAnswer::fromStream(QDataStream &stream)
     return stream;
 }
 
+
+
 DataType AuthAnswer::type() const
 {
     return DataType::AuthResponse;
 }
+
+
 
 bool AuthAnswer::isSigned() const
 {
     return answer;
 }
 
-void AuthAnswer::setSigned(bool answer)
+
+
+void
+AuthAnswer::setSigned(bool answer)
 {
     this->answer = answer;
 }

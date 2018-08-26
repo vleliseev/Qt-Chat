@@ -14,6 +14,7 @@ public:
     virtual QDataStream& fromStream(QDataStream &stream) override;
     virtual DataType type() const override;
 
+
     QList<UserData> getUsers() const;
 
 private:

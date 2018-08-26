@@ -20,13 +20,11 @@ public:
     explicit NetService(QObject *parent = nullptr);
     virtual ~NetService();
 
-    /* writing data to server by socket */
-    /* !!! data classes contain insecure serialization !!! */
     void write(QTcpSocket *socket, const BaseData &data);
 
 private slots:
 
-    /* slot handles clicking "Sing in" button in auth menu */
+    // Slot handles clicking "Sing in" button in auth menu
     void onSignIn(const QString &username, const QString &password);
 
     void onSocketConnected();
@@ -38,6 +36,8 @@ private slots:
 private:
 
     void connectSocketSignals();
+
+    // Incoming data handling methods
     void readUserList(QDataStream &readStream);
     void readAuthAnswer(QDataStream &readStream);
     void readNewConnection(QDataStream &readStream);

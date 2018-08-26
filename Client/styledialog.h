@@ -13,12 +13,10 @@ class StyleDialog;
 class StyleDialog : public QDialog
 {
     Q_OBJECT
-
 public:
 
     explicit StyleDialog(QWidget *parent = 0);
     ~StyleDialog();
-
 
 signals:
 
@@ -31,6 +29,7 @@ private slots:
     void on_pushButton_clicked();
 
 private:
+
     Ui::StyleDialog *ui;
 
     QFont userFont;
